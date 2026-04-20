@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { background: #0f0f0f; color: #ffffff; font-family: -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 30px 20px; }
+        .card { background: #1c1c1e; border: 1px solid #38383a; border-radius: 20px; padding: 25px; width: 90%; max-width: 350px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .label { color: #8e8e93; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .value { font-size: 32px; font-weight: bold; color: #007aff; }
+        .status { display: inline-block; margin-top: 10px; padding: 5px 12px; border-radius: 10px; background: rgba(50, 215, 75, 0.1); color: #32d74b; font-size: 14px; }
+        .btn-close { margin-top: 30px; background: #38383a; color: white; border: none; padding: 15px 40px; border-radius: 12px; font-weight: 600; width: 100%; max-width: 350px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="label">Ваш баланс</div>
+        <div id="balance" class="value">0 ₽</div>
+        <div class="status">● Активен</div>
+    </div>
+    
+    <div class="card">
+        <div class="label">Осталось дней</div>
+        <div id="days" class="value">0</div>
+    </div>
+
+    <button class="btn-close" onclick="window.Telegram.WebApp.close()">Вернуться в бот</button>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand(); // Развернуть на весь экран
+
+        // Считываем данные из ссылки
+        const params = new URLSearchParams(window.location.search);
+        const balance = params.get('balance') || '0';
+        const days = params.get('days') || '0';
+
+        document.getElementById('balance').innerText = balance + ' ₽';
+        document.getElementById('days').innerText = days;
+    </script>
+</body>
+</html>
