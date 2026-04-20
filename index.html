@@ -9,13 +9,13 @@
     <style>
         :root {
             --bg-color: #000000;
-            --card-bg: #1C1C1E; /* Apple Dark Gray */
+            --card-bg: #1C1C1E;
             --text-main: #FFFFFF;
             --text-secondary: #8E8E93;
             --accent-gray: #2C2C2E;
             --icon-color: #AEAEB2;
+            --status-green: #30D158;
         }
-
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
@@ -25,24 +25,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow: hidden;
         }
-
-        /* HEADER */
         .header {
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 24px;
-            padding: 0 4px;
         }
-
-        .bot-name {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
+        .bot-name { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
         .status-badge {
             background-color: var(--card-bg);
             color: var(--text-secondary);
@@ -53,174 +45,104 @@
             align-items: center;
             gap: 6px;
         }
-
-        .status-dot {
-            width: 7px;
-            height: 7px;
-            background-color: #30D158; /* Apple Green */
-            border-radius: 50%;
-        }
-
-        /* MAIN CARD */
+        .status-dot { width: 8px; height: 8px; background-color: var(--status-green); border-radius: 50%; box-shadow: 0 0 10px var(--status-green); }
+        
         .main-card {
             background-color: var(--card-bg);
             width: 100%;
-            border-radius: 24px;
+            border-radius: 28px;
             padding: 24px;
             box-sizing: border-box;
             margin-bottom: 16px;
+            text-align: left;
         }
-
-        .balance-label {
-            color: var(--text-secondary);
-            font-size: 12px;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .balance-value {
-            font-size: 44px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .stats-row {
-            display: flex;
-            gap: 12px;
-        }
-
-        .stat-box {
+        .info-label { color: var(--text-secondary); font-size: 13px; margin-bottom: 6px; }
+        .info-value { font-size: 32px; font-weight: 700; margin-bottom: 24px; color: var(--text-main); }
+        
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .stat-item {
             background-color: var(--accent-gray);
-            flex: 1;
-            border-radius: 16px;
-            padding: 14px;
+            border-radius: 18px;
+            padding: 16px;
             display: flex;
-            align-items: center;
-            gap: 10px;
+            flex-direction: column;
+            gap: 8px;
         }
+        .stat-item i { color: var(--icon-color); font-size: 18px; }
+        .stat-text { font-weight: 600; font-size: 15px; }
+        .stat-desc { color: var(--text-secondary); font-size: 11px; }
 
-        .stat-box i {
-            color: var(--icon-color);
-            font-size: 18px;
-        }
-
-        .stat-info .val { font-weight: 600; font-size: 16px; }
-        .stat-info .lbl { color: var(--text-secondary); font-size: 12px; }
-
-        /* BUTTONS */
-        .action-btn {
+        .action-list { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+        .menu-btn {
             width: 100%;
             background-color: var(--card-bg);
             border: none;
             border-radius: 20px;
-            padding: 18px;
-            margin-bottom: 10px;
+            padding: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             color: var(--text-main);
             cursor: pointer;
-            box-sizing: border-box;
+            transition: opacity 0.2s;
         }
-
-        .btn-left {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .btn-left i {
-            color: var(--icon-color);
-            font-size: 18px;
-            width: 20px;
-            text-align: center;
-        }
-
+        .menu-btn:active { opacity: 0.7; }
+        .btn-content { display: flex; align-items: center; gap: 16px; }
+        .btn-content i { color: var(--icon-color); font-size: 20px; width: 24px; text-align: center; }
         .btn-title { font-weight: 600; font-size: 16px; }
-        .btn-desc { color: var(--text-secondary); font-size: 12px; }
-
-        .btn-chevron { color: #3A3A3C; font-size: 14px; }
-
-        .primary-btn { background-color: #f0f0f0; color: #000; }
-        .primary-btn i, .primary-btn .btn-desc { color: #555; }
+        .chevron { color: var(--accent-gray); font-size: 14px; }
     </style>
 </head>
 <body>
-
     <div class="header">
         <div class="bot-name">NOXCHI VPN</div>
-        <div class="status-badge">
-            <div class="status-dot"></div>
-            Online
-        </div>
+        <div class="status-badge"><div class="status-dot"></div>Подключено</div>
     </div>
 
     <div class="main-card">
-        <div class="balance-label">Баланс</div>
-        <div id="balance" class="balance-value">0 ₽</div>
+        <div class="info-label">Состояние доступа</div>
+        <div class="info-value">Активен</div>
         
-        <div class="stats-row">
-            <div class="stat-box">
-                <i class="fa-regular fa-calendar"></i>
-                <div class="stat-info">
-                    <div id="days" class="val">0 дней</div>
-                    <div class="lbl">Осталось</div>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <i class="fa-solid fa-shield-halved"></i>
+                <div>
+                    <div class="stat-text">Защищено</div>
+                    <div class="stat-desc">Шифрование Reality</div>
                 </div>
             </div>
-            <div class="stat-box">
-                <i class="fa-solid fa-layer-group"></i>
-                <div class="stat-info">
-                    <div class="val">1/5</div>
-                    <div class="lbl">Лимит</div>
+            <div class="stat-item">
+                <i class="fa-solid fa-gauge-high"></i>
+                <div>
+                    <div class="stat-text">Безлимит</div>
+                    <div class="stat-desc">Скорость до 1 Гбит/с</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <button class="action-btn">
-        <div class="btn-left">
-            <i class="fa-solid fa-wallet"></i>
-            <div>
-                <div class="btn-title">Пополнить баланс</div>
-                <div class="btn-desc">СБП, Карты</div>
+    <div class="action-list">
+        <button class="menu-btn" onclick="Telegram.WebApp.close()">
+            <div class="btn-content">
+                <i class="fa-solid fa-circle-check"></i>
+                <div class="btn-title">Начать работу</div>
             </div>
-        </div>
-        <i class="fa-solid fa-chevron-right btn-chevron"></i>
-    </button>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+        </button>
 
-    <button class="action-btn">
-        <div class="btn-left">
-            <i class="fa-solid fa-shield-halved"></i>
-            <div>
-                <div class="btn-title">Мои подписки</div>
-                <div class="btn-desc">Управление тарифом</div>
+        <button class="menu-btn" onclick="Telegram.WebApp.close()">
+            <div class="btn-content">
+                <i class="fa-solid fa-book"></i>
+                <div class="btn-title">Инструкция</div>
             </div>
-        </div>
-        <i class="fa-solid fa-chevron-right btn-chevron"></i>
-    </button>
-
-    <button class="action-btn">
-        <div class="btn-left">
-            <i class="fa-solid fa-message"></i>
-            <div>
-                <div class="btn-title">Поддержка</div>
-                <div class="btn-desc">Помощь 24/7</div>
-            </div>
-        </div>
-        <i class="fa-solid fa-chevron-right btn-chevron"></i>
-    </button>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+        </button>
+    </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
-        
-        const urlParams = new URLSearchParams(window.location.search);
-        const balance = urlParams.get('balance') || '0';
-        const days = urlParams.get('days') || '0';
-
-        document.getElementById('balance').innerText = balance + ' ₽';
-        document.getElementById('days').innerText = days + ' дней';
+        tg.headerColor = '#000000';
     </script>
 </body>
 </html>
