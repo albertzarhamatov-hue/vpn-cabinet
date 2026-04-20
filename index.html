@@ -2,43 +2,225 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NOXCHI VPN</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #0f0f0f; color: #ffffff; font-family: -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 30px 20px; }
-        .card { background: #1c1c1e; border: 1px solid #38383a; border-radius: 20px; padding: 25px; width: 90%; max-width: 350px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .label { color: #8e8e93; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-        .value { font-size: 32px; font-weight: bold; color: #007aff; }
-        .status { display: inline-block; margin-top: 10px; padding: 5px 12px; border-radius: 10px; background: rgba(50, 215, 75, 0.1); color: #32d74b; font-size: 14px; }
-        .btn-close { margin-top: 30px; background: #38383a; color: white; border: none; padding: 15px 40px; border-radius: 12px; font-weight: 600; width: 100%; max-width: 350px; }
+        :root {
+            --bg-color: #000000;
+            --card-bg: #1C1C1E; /* Apple Dark Gray */
+            --text-main: #FFFFFF;
+            --text-secondary: #8E8E93;
+            --accent-gray: #2C2C2E;
+            --icon-color: #AEAEB2;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* HEADER */
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding: 0 4px;
+        }
+
+        .bot-name {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .status-badge {
+            background-color: var(--card-bg);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background-color: #30D158; /* Apple Green */
+            border-radius: 50%;
+        }
+
+        /* MAIN CARD */
+        .main-card {
+            background-color: var(--card-bg);
+            width: 100%;
+            border-radius: 24px;
+            padding: 24px;
+            box-sizing: border-box;
+            margin-bottom: 16px;
+        }
+
+        .balance-label {
+            color: var(--text-secondary);
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .balance-value {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .stat-box {
+            background-color: var(--accent-gray);
+            flex: 1;
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-box i {
+            color: var(--icon-color);
+            font-size: 18px;
+        }
+
+        .stat-info .val { font-weight: 600; font-size: 16px; }
+        .stat-info .lbl { color: var(--text-secondary); font-size: 12px; }
+
+        /* BUTTONS */
+        .action-btn {
+            width: 100%;
+            background-color: var(--card-bg);
+            border: none;
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--text-main);
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .btn-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .btn-left i {
+            color: var(--icon-color);
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .btn-title { font-weight: 600; font-size: 16px; }
+        .btn-desc { color: var(--text-secondary); font-size: 12px; }
+
+        .btn-chevron { color: #3A3A3C; font-size: 14px; }
+
+        .primary-btn { background-color: #f0f0f0; color: #000; }
+        .primary-btn i, .primary-btn .btn-desc { color: #555; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <div class="label">Ваш баланс</div>
-        <div id="balance" class="value">0 ₽</div>
-        <div class="status">● Активен</div>
-    </div>
-    
-    <div class="card">
-        <div class="label">Осталось дней</div>
-        <div id="days" class="value">0</div>
+
+    <div class="header">
+        <div class="bot-name">NOXCHI VPN</div>
+        <div class="status-badge">
+            <div class="status-dot"></div>
+            Online
+        </div>
     </div>
 
-    <button class="btn-close" onclick="window.Telegram.WebApp.close()">Вернуться в бот</button>
+    <div class="main-card">
+        <div class="balance-label">Баланс</div>
+        <div id="balance" class="balance-value">0 ₽</div>
+        
+        <div class="stats-row">
+            <div class="stat-box">
+                <i class="fa-regular fa-calendar"></i>
+                <div class="stat-info">
+                    <div id="days" class="val">0 дней</div>
+                    <div class="lbl">Осталось</div>
+                </div>
+            </div>
+            <div class="stat-box">
+                <i class="fa-solid fa-layer-group"></i>
+                <div class="stat-info">
+                    <div class="val">1/5</div>
+                    <div class="lbl">Лимит</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="action-btn">
+        <div class="btn-left">
+            <i class="fa-solid fa-wallet"></i>
+            <div>
+                <div class="btn-title">Пополнить баланс</div>
+                <div class="btn-desc">СБП, Карты</div>
+            </div>
+        </div>
+        <i class="fa-solid fa-chevron-right btn-chevron"></i>
+    </button>
+
+    <button class="action-btn">
+        <div class="btn-left">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div>
+                <div class="btn-title">Мои подписки</div>
+                <div class="btn-desc">Управление тарифом</div>
+            </div>
+        </div>
+        <i class="fa-solid fa-chevron-right btn-chevron"></i>
+    </button>
+
+    <button class="action-btn">
+        <div class="btn-left">
+            <i class="fa-solid fa-message"></i>
+            <div>
+                <div class="btn-title">Поддержка</div>
+                <div class="btn-desc">Помощь 24/7</div>
+            </div>
+        </div>
+        <i class="fa-solid fa-chevron-right btn-chevron"></i>
+    </button>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand(); // Развернуть на весь экран
-
-        // Считываем данные из ссылки
-        const params = new URLSearchParams(window.location.search);
-        const balance = params.get('balance') || '0';
-        const days = params.get('days') || '0';
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const balance = urlParams.get('balance') || '0';
+        const days = urlParams.get('days') || '0';
 
         document.getElementById('balance').innerText = balance + ' ₽';
-        document.getElementById('days').innerText = days;
+        document.getElementById('days').innerText = days + ' дней';
     </script>
 </body>
 </html>
