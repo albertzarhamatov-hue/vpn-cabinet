@@ -12,182 +12,134 @@
             --card-bg: #1C1C1E;
             --text-main: #FFFFFF;
             --text-secondary: #8E8E93;
-            --accent-gray: #2C2C2E;
-            --icon-color: #AEAEB2;
-            --status-green: #30D158;
             --accent-blue: #0A84FF;
+            --accent-orange: #FF9F0A;
+            --accent-gray: #2C2C2E;
         }
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0; padding: 16px;
+            display: flex; flex-direction: column; align-items: center;
         }
-        .header {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-        .bot-name { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; italic; }
-        .status-badge {
-            background-color: var(--card-bg);
-            color: var(--text-secondary);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .status-dot { width: 8px; height: 8px; background-color: var(--status-green); border-radius: 50%; box-shadow: 0 0 10px var(--status-green); }
+        .header { width: 100%; display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: 700; }
         
-        .main-card {
-            background-color: var(--card-bg);
+        .interactive-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
             width: 100%;
-            border-radius: 28px;
-            padding: 24px;
-            box-sizing: border-box;
-            margin-bottom: 16px;
-            text-align: left;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background-color: var(--card-bg);
             border: 1px solid var(--accent-gray);
-        }
-        .info-label { color: var(--text-secondary); font-size: 13px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .info-value { font-size: 32px; font-weight: 800; margin-bottom: 24px; color: var(--text-main); }
-        
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .stat-item {
-            background-color: var(--accent-gray);
-            border-radius: 18px;
+            border-radius: 20px;
             padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-        }
-        .stat-item i { color: var(--accent-blue); font-size: 18px; }
-        .stat-text { font-weight: 700; font-size: 16px; }
-        .stat-desc { color: var(--text-secondary); font-size: 11px; }
-
-        .action-list { width: 100%; display: flex; flex-direction: column; gap: 10px; }
-        .menu-btn {
-            width: 100%;
-            background-color: var(--card-bg);
-            border: none;
-            border-radius: 20px;
-            padding: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: var(--text-main);
+            gap: 10px;
             cursor: pointer;
-            transition: transform 0.1s;
+            transition: background-color 0.2s, transform 0.1s;
+            -webkit-tap-highlight-color: transparent;
+            text-align: left;
         }
-        .menu-btn:active { transform: scale(0.98); opacity: 0.8; }
-        .btn-content { display: flex; align-items: center; gap: 16px; }
-        .btn-content i { color: var(--icon-color); font-size: 18px; width: 24px; text-align: center; }
-        .btn-title { font-weight: 600; font-size: 15px; }
-        .chevron { color: var(--text-secondary); font-size: 12px; opacity: 0.5; }
+        .stat-card:active {
+            transform: scale(0.96);
+            background-color: var(--accent-gray);
+        }
+        
+        .stat-card i { font-size: 20px; }
+        .days-icon { color: var(--accent-orange); }
+        .device-icon { color: var(--accent-blue); }
+        
+        .stat-val { font-size: 22px; font-weight: 800; }
+        .stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.4px; }
+
+        .section-title { width: 100%; text-align: left; font-size: 13px; color: var(--text-secondary); margin: 10px 0 8px 10px; text-transform: uppercase; }
+        .action-list { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+        .menu-item {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--accent-gray);
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="bot-name">NOKCHI VPN</div>
-        <div class="status-badge"><div class="status-dot"></div> Активен</div>
+        <span>NOKCHI VPN</span>
+        <span style="color: #30D158">● Online</span>
     </div>
 
-    <div class="main-card">
-        <div class="info-label">Ваш доступ</div>
-        <div id="main-status" class="info-value">Оплачен</div>
-        
-        <div class="stats-grid">
-            <!-- Остаток дней -->
-            <div class="stat-item">
-                <i class="fa-solid fa-calendar-check"></i>
-                <div>
-                    <div id="days-val" class="stat-text">30 дней</div>
-                    <div class="stat-desc">Осталось</div>
-                </div>
+    <div class="interactive-grid">
+        <div class="stat-card" onclick="extendSubscription()">
+            <i class="fa-solid fa-calendar-day days-icon"></i>
+            <div>
+                <div class="stat-val" id="days-val">24 дн.</div>
+                <div class="stat-label">Продлить</div>
             </div>
-            
-            <!-- Лимит устройств -->
-            <div class="stat-item">
-                <i class="fa-solid fa-mobile-screen"></i>
-                <div>
-                    <div id="dev-val" class="stat-text">1 / 3</div>
-                    <div class="stat-desc">Устройства</div>
-                </div>
-            </div>
+        </div>
 
-            <div class="stat-item">
-                <i class="fa-solid fa-bolt"></i>
-                <div>
-                    <div class="stat-text">1 Гбит/с</div>
-                    <div class="stat-desc">Скорость</div>
-                </div>
-            </div>
-            
-            <div class="stat-item">
-                <i class="fa-solid fa-key"></i>
-                <div>
-                    <div class="stat-text">VLESS</div>
-                    <div class="stat-desc">Протокол</div>
-                </div>
+        <div class="stat-card" onclick="manageDevices()">
+            <i class="fa-solid fa-laptop-mobile device-icon"></i>
+            <div>
+                <div class="stat-val" id="dev-val">1 / 3</div>
+                <div class="stat-label">Устройства</div>
             </div>
         </div>
     </div>
 
+    <div class="section-title">Быстрые действия</div>
     <div class="action-list">
-        <button class="menu-btn" onclick="copyKey()">
-            <div class="btn-content">
-                <i class="fa-solid fa-copy"></i>
-                <div class="btn-title">Скопировать ключ</div>
+        <div class="menu-item" onclick="updateKey()">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <i class="fa-solid fa-key" style="color: #FFD60A; width: 20px;"></i>
+                <span style="font-weight: 600;">Обновить ключ</span>
             </div>
-            <i class="fa-solid fa-chevron-right chevron"></i>
-        </button>
-
-        <button class="menu-btn" onclick="openHelp()">
-            <div class="btn-content">
-                <i class="fa-solid fa-circle-question"></i>
-                <div class="btn-title">Как подключить?</div>
-            </div>
-            <i class="fa-solid fa-chevron-right chevron"></i>
-        </button>
+            <i class="fa-solid fa-chevron-right" style="color: var(--text-secondary); font-size: 12px;"></i>
+        </div>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
         tg.headerColor = '#000000';
-        tg.backgroundColor = '#000000';
 
-        // Функция для обновления данных (Альберт, сюда бот будет слать цифры)
-        function setStats(days, currentDev, maxDev) {
-            document.getElementById('days-val').innerText = days + ' дн.';
-            document.getElementById('dev-val').innerText = currentDev + ' / ' + maxDev;
-            if (days <= 0) {
-                document.getElementById('main-status').innerText = 'Истек';
-                document.getElementById('main-status').style.color = '#FF453A';
-            }
-        }
-
-        // Заглушка: установим 24 дня и 1 устройство
-        setStats(24, 1, 3);
-
-        function copyKey() {
-            // Тут будет логика копирования твоего ключа
-            tg.HapticFeedback.notificationOccurred('success');
-            alert('Ключ скопирован в буфер обмена!');
-        }
-
-        function openHelp() {
-            // Можно отправить сообщение боту или открыть ссылку
+        function extendSubscription() {
             tg.HapticFeedback.impactOccurred('medium');
+            tg.showConfirm("Перейти к выбору тарифа для продления?", (ok) => {
+                if(ok) {
+                    tg.sendData("action_extend"); 
+                    tg.close();
+                }
+            });
+        }
+
+        function manageDevices() {
+            tg.HapticFeedback.impactOccurred('medium');
+            tg.showConfirm("Открыть управление устройствами?", (ok) => {
+                if(ok) {
+                    tg.sendData("action_manage_devices");
+                    tg.close();
+                }
+            });
+        }
+
+        function updateKey() {
+            tg.HapticFeedback.notificationOccurred('warning');
+            tg.showConfirm("Сгенерировать новый ключ? Старый перестанет работать.", (ok) => {
+                if(ok) {
+                    tg.sendData("action_update_key");
+                    tg.close();
+                }
+            });
         }
     </script>
 </body>
